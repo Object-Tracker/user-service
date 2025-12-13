@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,10 +20,32 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
     private String userPassword;
+    @Column(unique = true)
     private String email;
+
+    // Geofence center coordinates (user's home/base location)
+    private Double geofenceCenterLat;
+    private Double geofenceCenterLng;
+    private Double geofenceRadiusMeters;
+
+    // Web Push subscription (legacy)
+    @Column(length = 500)
+    private String pushEndpoint;
+    @Column(length = 500)
+    private String pushP256dh;
+    @Column(length = 500)
+    private String pushAuth;
+
+    // Firebase Cloud Messaging token
+    @Column(length = 500)
+    private String fcmToken;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<TrackedObject> trackedObjects = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -30,7 +53,9 @@ public class User implements UserDetails {
     }
 
     @Override
-    public @NonNull String getUsername(){ return this.username; }
+    public String getUsername() {
+        return this.username;
+    }
 
     @Override
     public String getPassword() {
@@ -39,21 +64,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 }

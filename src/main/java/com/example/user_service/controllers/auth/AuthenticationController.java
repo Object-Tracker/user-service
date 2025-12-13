@@ -38,7 +38,6 @@ public class AuthenticationController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(Map.of("message", "Register successful"));
-//        return ResponseEntity.ok(this.authenticationService.register(request));
     }
 
     @PostMapping("/login")
@@ -49,13 +48,26 @@ public class AuthenticationController {
         ResponseCookie cookie = ResponseCookie.from("token", response.getToken())
                 .httpOnly(true)
                 .secure(false)
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .path("/")
                 .maxAge(24 * 60 * 60 * 3) // 3 days
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(Map.of("message", "Login successful"));
-//        return ResponseEntity.ok(this.authenticationService.login(request));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        ResponseCookie cookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(0)
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(Map.of("message", "Logout successful"));
     }
 }

@@ -19,19 +19,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
     @Column(nullable = false, unique = true)
     private String username;
     private String userPassword;
     @Column(unique = true)
     private String email;
-
-    // Geofence center coordinates (user's home/base location)
+    
     private Double geofenceCenterLat;
     private Double geofenceCenterLng;
     private Double geofenceRadiusMeters;
 
-    // Web Push subscription (legacy)
     @Column(length = 500)
     private String pushEndpoint;
     @Column(length = 500)
@@ -39,7 +36,6 @@ public class User implements UserDetails {
     @Column(length = 500)
     private String pushAuth;
 
-    // Firebase Cloud Messaging token
     @Column(length = 500)
     private String fcmToken;
 

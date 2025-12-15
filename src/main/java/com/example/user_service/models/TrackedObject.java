@@ -19,15 +19,13 @@ public class TrackedObject {
     private String name;
 
     @Column(nullable = false)
-    private String type; // KEYS, BICYCLE, BAG, LAPTOP, PHONE, OTHER
+    private String type;
 
-    private String icon; // optional icon identifier
+    private String icon; 
 
-    // Current location
     private Double latitude;
     private Double longitude;
 
-    // Is object currently outside geofence
     @Builder.Default
     private Boolean outsideGeofence = false;
 

@@ -50,16 +50,13 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
-        // subject should be email / username of the user
         return this.extractClaim(token, Claims::getSubject);
     }
 
-    // without extra info
     public String generateToken(UserDetails userDetails) {
         return this.generateToken(new HashMap<>(), userDetails);
     }
 
-    // including extra info
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
@@ -74,7 +71,6 @@ public class JwtService {
                  .compact();
     }
 
-    // check if email from input is same as email of input userDetails
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = this.extractUsername(token);
         return username.equals(userDetails.getUsername()) && !this.isTokenExpired(token);
